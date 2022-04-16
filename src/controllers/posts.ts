@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from 'axios';
 
 interface Locate {
     id: Number;
-    address: Number;
+    address: String;
     longitude: String;
     latitude: String;
 }
