@@ -1,11 +1,22 @@
+//import modules
 import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';
 
-import routes from './routes/posts';
-
 const router: Express = express();
 
+// import routes
+import typeofexcursion from './routes/typeofexcursion.routes';
+import typeofvisiting from './routes/typeofvisiting.routes';
+import excursion from './routes/excursion.routes';
+
+/** Routes */
+router.use('/api', typeofexcursion);
+router.use('/api', typeofvisiting);
+router.use('/api', excursion);
+
+//class Server
+//Singleton pattern
 class Server {
 
     static instance: Server
@@ -21,25 +32,29 @@ class Server {
     }
 
     public StartServer(router: Express){
-        // const httpServer = http.createServer(router);
+        const httpServer = http.createServer(router);
         const PORT: any = process.env.PORT ?? 6060;
-        http.createServer(router).listen(PORT, () => console.log(`The server is running on port ${PORT}`));
+        httpServer.listen(PORT, () => console.log(`The server is running on port ${PORT}`));
     }
 }
 
 const server = Server.getInstance()
 
+/** Server */
+server.StartServer(router)
 
 
 
 /** Logging */
 router.use(morgan('dev'));
+
 /** Parse the request */
 router.use(express.urlencoded({ extended: false }));
+
 /** Takes care of JSON data */
 router.use(express.json());
 
-/** RULES OF OUR API */
+/** API rules*/
 router.use((req, res, next) => {
     // set the CORS policy
     res.header('Access-Control-Allow-Origin', '*');
@@ -53,9 +68,6 @@ router.use((req, res, next) => {
     next();
 });
 
-/** Routes */
-router.use('/api', routes);
-
 /** Error handling */
 router.use((req, res, next) => {
     const error = new Error('not found');
@@ -64,5 +76,3 @@ router.use((req, res, next) => {
     });
 });
 
-/** Server */
-server.StartServer(router)

@@ -1,41 +1,58 @@
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse } from 'axios';
 
+import {IController} from "./controller";
+
 const db = require('../db/DBConnection.ts')
 
-interface TypeOfVisiting {
-    id: Number;
-    type: String;
+class ExcursionController implements IController{
+
+    public async getAll(req: Request, res: Response, next: NextFunction){
+        try {
+            let sql: string = `SELECT * FROM excursion`
+            let result = await db.query(sql)
+            let typesOfVisiting: [ExcursionController] = result.rows;
+            res.json(typesOfVisiting)
+            // return result.json({
+            //     message: typesOfVisiting
+            // });
+        }
+        catch (error){
+            console.error(error)
+            next(error)
+        }
+    };
 }
 
 // getting all Types of visiting
-const getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        let sql: string = `SELECT * FROM typeofvisiting`
-        // let result = await db.query(sql)
-        let typesOfVisiting: [TypeOfVisiting] = await db.query(sql).rows;
-        return res.json({
-            message: typesOfVisiting
-        });
-    }
-    catch (error){
-        console.error(error)
-        next(error)
-    }
-};
+// const getAll = async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         let sql: string = `SELECT * FROM typeofvisiting`
+//         let result = await db.query(sql)
+//         let typesOfVisiting: [ITypeOfVisiting] = result.rows;
+//         res.json(typesOfVisiting)
+//         // return result.json({
+//         //     message: typesOfVisiting
+//         // });
+//     }
+//     catch (error){
+//         console.error(error)
+//         next(error)
+//     }
+// };
 //API GET locate by id
-const getById = async (req: Request, res: Response, next: NextFunction) => {
-    try{
-        const id = req.params.id
-        let sql: string = `SELECT * FROM locate WHERE id = $1`
-        let result = await db.query(sql, [id])
-        res.json(result.rows)
-    }
-    catch (error){
-        console.error(error)
-        next(error)
-    }
-}
+// const getById = async (req: Request, res: Response, next: NextFunction) => {
+//     try{
+//         const id = req.params.id
+//         let sql: string = `SELECT * FROM locate WHERE id = $1`
+//         let result = await db.query(sql, [id])
+//         res.json(result.rows)
+//     }
+//     catch (error){
+//         console.error(error)
+//         next(error)
+//     }
+// }
 // // getting a single post
 // const getPost = async (req: Request, res: Response, next: NextFunction) => {
 //     // get the post id from the req
@@ -94,6 +111,6 @@ const getById = async (req: Request, res: Response, next: NextFunction) => {
 //     });
 // };
 
-export default { getAll };
 
-// getPost, updatePost, deletePost, addPost
+let excursion= new ExcursionController()
+export { excursion }
