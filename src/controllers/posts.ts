@@ -1,24 +1,41 @@
-/** source/controllers/posts.ts */
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse } from 'axios';
 
-interface Locate {
+const db = require('../db/DBConnection.ts')
+
+interface TypeOfVisiting {
     id: Number;
-    address: String;
-    longitude: String;
-    latitude: String;
+    type: String;
 }
 
-// getting all posts
+// getting all Types of visiting
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
-    // get some posts
-    let result: AxiosResponse = await axios.get(`http://localhost:3000/api/locate`);
-    let locates: [Locate] = result.data;
-    return res.status(200).json({
-        message: locates
-    });
+    try {
+        let sql: string = `SELECT * FROM typeofvisiting`
+        // let result = await db.query(sql)
+        let typesOfVisiting: [TypeOfVisiting] = await db.query(sql).rows;
+        return res.json({
+            message: typesOfVisiting
+        });
+    }
+    catch (error){
+        console.error(error)
+        next(error)
+    }
 };
-
+//API GET locate by id
+const getById = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const id = req.params.id
+        let sql: string = `SELECT * FROM locate WHERE id = $1`
+        let result = await db.query(sql, [id])
+        res.json(result.rows)
+    }
+    catch (error){
+        console.error(error)
+        next(error)
+    }
+}
 // // getting a single post
 // const getPost = async (req: Request, res: Response, next: NextFunction) => {
 //     // get the post id from the req

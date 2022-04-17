@@ -1,9 +1,36 @@
 import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';
+
 import routes from './routes/posts';
 
 const router: Express = express();
+
+class Server {
+
+    static instance: Server
+
+    private constructor(){
+
+    }
+    static getInstance(): Server {
+        if (!Server.instance){
+            Server.instance = new Server()
+        }
+        return Server.instance
+    }
+
+    public StartServer(router: Express){
+        // const httpServer = http.createServer(router);
+        const PORT: any = process.env.PORT ?? 6060;
+        http.createServer(router).listen(PORT, () => console.log(`The server is running on port ${PORT}`));
+    }
+}
+
+const server = Server.getInstance()
+
+
+
 
 /** Logging */
 router.use(morgan('dev'));
@@ -38,6 +65,4 @@ router.use((req, res, next) => {
 });
 
 /** Server */
-const httpServer = http.createServer(router);
-const PORT: any = process.env.PORT ?? 6060;
-httpServer.listen(PORT, () => console.log(`The server is running on port ${PORT}`));
+server.StartServer(router)
