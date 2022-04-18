@@ -6,3 +6,16 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+model TypeOfExcursion {
+  id       Int    @id @default(autoincrement())
+  typeexcursion    String
+}
+
+model TypeOfVisiting {
+  id       Int    @id @default(autoincrement())
+  title    String
+  location String
+  salary   String
+}
+
