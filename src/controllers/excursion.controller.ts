@@ -9,10 +9,34 @@ class ExcursionController implements IController{
 
     public async getAll(req: Request, res: Response, next: NextFunction){
         try {
-            let sql: string = `SELECT * FROM excursion`
+            let sql: string = `SELECT * FROM excursion `
+            // JOIN typeofexcursion ON (excursion.typeExcursion = typeofexcursion.id)
             let result = await db.query(sql)
             let typesOfVisiting: [ExcursionController] = result.rows;
+            // result.rows[0];
+
+            let json1: any = {
+                name: "Василий Иванович",
+                age: 35,
+              };
+              
+            let json2: any = {
+                address: {
+                    street: "Широтная",
+                    house: "29",
+                    city: {
+                        name: "Тюмень"
+                    }
+                }
+            }
+
+            let final: any = JSON.stringify(json1, json2)
+              
+            let jsonRes: any = JSON.parse(final)
+
+            // console.log(jsonRes)
             res.json(typesOfVisiting)
+
             // return result.json({
             //     message: typesOfVisiting
             // });
