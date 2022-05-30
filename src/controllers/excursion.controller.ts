@@ -9,11 +9,15 @@ class ExcursionController implements IController{
 
     public async getAll(req: Request, res: Response, next: NextFunction){
         try {
-            let sql: string = `SELECT * FROM excursion `
-            // JOIN typeofexcursion ON (excursion.typeExcursion = typeofexcursion.id)
+            let sql: string =   `SELECT * 
+                                FROM excursion 
+                                JOIN typeofexcursion 
+                                ON excursion.typeexcursion_id=typeofexcursion.id
+                                JOIN typeofvisiting 
+                                ON excursion.typevisiting_id=typeofvisiting.id;`
+
             let result = await db.query(sql)
             let typesOfVisiting: [ExcursionController] = result.rows;
-            // result.rows[0];
 
             let json1: any = {
                 name: "Василий Иванович",
@@ -45,25 +49,34 @@ class ExcursionController implements IController{
             console.error(error)
             next(error)
         }
-    };
+    }
+
+    // getting excursion by id
+    public async getAllById(req: Request, res: Response, next: NextFunction){
+        try {
+            const id = req.params.id
+            let sql: string =   `SELECT * 
+                                    FROM excursion 
+                                    JOIN typeofexcursion 
+                                    ON excursion.typeexcursion_id=typeofexcursion.id
+                                    JOIN typeofvisiting 
+                                    ON excursion.typevisiting_id=typeofvisiting.id
+                                    WHERE excursion.id = $1;`
+            let result = await db.query(sql,[id])
+            let typesOfVisiting: [ExcursionController] = result.rows;
+            res.json(typesOfVisiting)
+            // return result.json({
+            //     message: typesOfVisiting
+            // });
+        }
+        catch (error){
+            console.error(error)
+            next(error)
+        }
+    }
 }
 
-// getting all Types of visiting
-// const getAll = async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         let sql: string = `SELECT * FROM typeofvisiting`
-//         let result = await db.query(sql)
-//         let typesOfVisiting: [ITypeOfVisiting] = result.rows;
-//         res.json(typesOfVisiting)
-//         // return result.json({
-//         //     message: typesOfVisiting
-//         // });
-//     }
-//     catch (error){
-//         console.error(error)
-//         next(error)
-//     }
-// };
+
 //API GET locate by id
 // const getById = async (req: Request, res: Response, next: NextFunction) => {
 //     try{

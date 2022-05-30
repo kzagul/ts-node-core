@@ -15,6 +15,16 @@ router.use('/api', typeofexcursion);
 router.use('/api', typeofvisiting);
 router.use('/api', excursion);
 
+
+const cors = require('cors');
+const corsOptions ={
+    origin:'http://localhost:6060', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+
+router.use(cors(corsOptions));
+
 //class Server
 //Singleton pattern
 class Server {
@@ -40,21 +50,14 @@ class Server {
 
 const server = Server.getInstance()
 
-/** Server */
 server.StartServer(router)
 
 
 
-/** Logging */
 router.use(morgan('dev'));
-
-/** Parse the request */
 router.use(express.urlencoded({ extended: false }));
-
-/** Takes care of JSON data */
 router.use(express.json());
 
-/** API rules*/
 router.use((req, res, next) => {
     // set the CORS policy
     res.header('Access-Control-Allow-Origin', '*');
@@ -68,7 +71,10 @@ router.use((req, res, next) => {
     next();
 });
 
-/** Error handling */
+router.get("/", (req, res) => {
+    res.json({ message: "TS node.js application" });
+  });
+
 router.use((req, res, next) => {
     const error = new Error('not found');
     return res.status(404).json({
