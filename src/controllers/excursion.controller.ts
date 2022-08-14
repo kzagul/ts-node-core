@@ -7,6 +7,7 @@ const db = require('../db/DBConnection.ts')
 
 class ExcursionController implements IController{
 
+    // getting all excursion 
     public async getAll(req: Request, res: Response, next: NextFunction){
         try {
             let sql: string =   `SELECT * 
@@ -40,10 +41,6 @@ class ExcursionController implements IController{
 
             // console.log(jsonRes)
             res.json(typesOfVisiting)
-
-            // return result.json({
-            //     message: typesOfVisiting
-            // });
         }
         catch (error){
             console.error(error)
@@ -65,9 +62,6 @@ class ExcursionController implements IController{
             let result = await db.query(sql,[id])
             let typesOfVisiting: [ExcursionController] = result.rows;
             res.json(typesOfVisiting)
-            // return result.json({
-            //     message: typesOfVisiting
-            // });
         }
         catch (error){
             console.error(error)
@@ -149,5 +143,5 @@ class ExcursionController implements IController{
 // };
 
 
-let excursion= new ExcursionController()
+let excursion = new ExcursionController()
 export { excursion }

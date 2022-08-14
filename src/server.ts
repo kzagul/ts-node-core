@@ -2,55 +2,32 @@
 import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';
+import Server from './classes/server'
 
 const router: Express = express();
 
 // import routes
-import typeofexcursion from './routes/typeofexcursion.routes';
-import typeofvisiting from './routes/typeofvisiting.routes';
-import excursion from './routes/excursion.routes';
+import {
+    typeofexcursion,
+    typeofvisiting,
+    excursion,
+    initEntryURL,
+    initErrorMessage
+} from './routes/index';
 
-/** Routes */
+// routes
 router.use('/api', typeofexcursion);
 router.use('/api', typeofvisiting);
 router.use('/api', excursion);
 
-
-const cors = require('cors');
-const corsOptions ={
-    origin:'http://localhost:6060', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
-
+// cors
+import {cors, corsOptions} from './modules/cors'
 router.use(cors(corsOptions));
 
-//class Server
-//Singleton pattern
-class Server {
-
-    static instance: Server
-
-    private constructor(){
-
-    }
-    static getInstance(): Server {
-        if (!Server.instance){
-            Server.instance = new Server()
-        }
-        return Server.instance
-    }
-
-    public StartServer(router: Express){
-        const httpServer = http.createServer(router);
-        const PORT: any = process.env.PORT ?? 6060;
-        httpServer.listen(PORT, () => console.log(`The server is running on port ${PORT}`));
-    }
-}
-
-const server = Server.getInstance()
-
-server.StartServer(router)
+// Server
+const server = Server
+    .getInstance()
+    .StartServer(router)
 
 
 
@@ -71,14 +48,14 @@ router.use((req, res, next) => {
     next();
 });
 
-router.get("/", (req, res) => {
-    res.json({ message: "TS node.js application" });
-  });
 
-router.use((req, res, next) => {
-    const error = new Error('not found');
-    return res.status(404).json({
-        message: error.message
-    });
-});
+const initNodeServer = () => {
+    initEntryURL(router)
+    initErrorMessage(router)
+}
 
+try {
+    initNodeServer()
+} catch (e: any) {
+    console.error(e.message)
+}
