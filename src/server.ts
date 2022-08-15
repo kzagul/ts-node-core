@@ -1,5 +1,4 @@
 //import modules
-import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';
 import Server from './classes/server'
@@ -11,6 +10,8 @@ import {
     typeofexcursion,
     typeofvisiting,
     excursion,
+    productCard,
+
     initEntryURL,
     initErrorMessage
 } from './routes/index';
@@ -19,6 +20,7 @@ import {
 router.use('/api', typeofexcursion);
 router.use('/api', typeofvisiting);
 router.use('/api', excursion);
+router.use('/api', productCard);
 
 // cors
 import {cors, corsOptions} from './modules/cors'

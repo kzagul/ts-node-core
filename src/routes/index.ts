@@ -1,6 +1,9 @@
+import express, { Express, Router } from 'express';
+
 import typeofexcursion from './typeofexcursion.routes';
 import typeofvisiting from './typeofvisiting.routes';
 import excursion from './excursion.routes';
+import productCard from './productCard.routes';
 
 function initEntryURL(router: any) {
     router.get("/", (req: any, res: any) => {
@@ -22,6 +25,7 @@ export {
     typeofexcursion, 
     typeofvisiting, 
     excursion,
+    productCard,
     
     // functions
     initEntryURL,

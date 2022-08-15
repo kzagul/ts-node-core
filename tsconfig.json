@@ -8,5 +8,8 @@
       "target": "es6",
       "skipLibCheck": true,
       "strict": true
-  }
+  },
+  "exclude": [
+    "src/modules/express.ts"
+    ]
 }
