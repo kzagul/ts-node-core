@@ -1,9 +1,13 @@
 //import modules
 import express, { Express } from 'express';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import Server from './classes/server'
 
+
 const router: Express = express();
+
+var cors = require('cors')
+router.use(cors()) 
 
 // import routes
 import {
@@ -23,8 +27,8 @@ router.use('/api', excursion);
 router.use('/api', productCard);
 
 // cors
-import {cors, corsOptions} from './modules/cors'
-router.use(cors(corsOptions));
+// import {cors, corsOptions} from './modules/cors'
+// router.use(cors(corsOptions));
 
 // Server
 const server = Server
@@ -33,22 +37,22 @@ const server = Server
 
 
 
-router.use(morgan('dev'));
-router.use(express.urlencoded({ extended: false }));
-router.use(express.json());
+// router.use(morgan('dev'));
+// router.use(express.urlencoded({ extended: false }));
+// router.use(express.json());
 
-router.use((req, res, next) => {
-    // set the CORS policy
-    res.header('Access-Control-Allow-Origin', '*');
-    // set the CORS headers
-    res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
-    // set the CORS method headers
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'GET PATCH DELETE POST');
-        return res.status(200).json({});
-    }
-    next();
-});
+// router.use((req, res, next) => {
+//     // set the CORS policy
+//     res.header('Access-Control-Allow-Origin', '*');
+//     // set the CORS headers
+//     res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
+//     // set the CORS method headers
+//     if (req.method === 'OPTIONS') {
+//         res.header('Access-Control-Allow-Methods', 'GET PATCH DELETE POST');
+//         return res.status(200).json({});
+//     }
+//     next();
+// });
 
 
 const initNodeServer = () => {
