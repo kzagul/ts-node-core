@@ -3,7 +3,6 @@ import express, { Express } from 'express';
 // import morgan from 'morgan';
 import Server from './classes/server'
 
-
 const router: Express = express();
 
 var cors = require('cors')
