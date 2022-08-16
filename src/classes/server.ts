@@ -7,7 +7,7 @@ export default class Server {
     static instance: Server
 
     private constructor(){
-
+        
     }
 
     static getInstance(): Server {
